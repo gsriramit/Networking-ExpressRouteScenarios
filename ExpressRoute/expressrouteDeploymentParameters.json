@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "southeastasia"
+        },
+        "name": {
+            "value": "ergw-primary-seasia-dev01"
+        },
+        "sku": {
+            "value": "Standard"
+        },
+        "gatewayType": {
+            "value": "ExpressRoute"
+        },
+        "subnetId": {
+            "value": "/subscriptions/83343ae6-3277-475f-8be1-946e5d6d9359/resourceGroups/rg-sharednetwork-dev01/providers/Microsoft.Network/virtualNetworks/vnet-hub-southeastaasia-dev01/subnets/GatewaySubnet"
+        },
+        "newPublicIpAddressName": {
+            "value": "pip-ergw-dev01"
+        }
+    }
+}
