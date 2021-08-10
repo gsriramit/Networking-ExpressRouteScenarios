@@ -9,7 +9,7 @@
             "value": "hub-vnet"
         },
         "resourceGroup": {
-            "value": ""
+            "value": "rg-sharednetwork-dev01"
         },
         "hubAddressSpaces": {
             "value": [
