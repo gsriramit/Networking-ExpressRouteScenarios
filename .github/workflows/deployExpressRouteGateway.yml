@@ -37,7 +37,7 @@ jobs:
         SP_TENANT_ID: ${{ secrets.AZURE_CREDENTIALS_SECONDARY.tenantId }}
         AZURE_SUBSCRIPTION_NAME: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
         ResourceGroupName: ${{ secrets.AZURE_RG_SHAREDNETWORK }}
-      run: .\Scripts\CreateERCircuitConnection.ps1
+      run: .\02-ExpressRoute\Scripts\CreateERCircuitConnection.ps1
       shell: pwsh
 
       # output containerName variable from template
