@@ -2,7 +2,7 @@ on: workflow_dispatch
 name: AzureARMDeploymentforBaseNetworkingandERGW
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
 
       # Checkout code
@@ -35,7 +35,7 @@ jobs:
         SP_CLIENT_ID: ${{ secrets.AZURE_CREDENTIALS_SECONDARY.clientId }}
         SP_CLIENT_SECRET: ${{ secrets.AZURE_CREDENTIALS_SECONDARY.clientsecret }}
         SP_TENANT_ID: ${{ secrets.AZURE_CREDENTIALS_SECONDARY.tenantId }}
-        AZURE_SUBSCRIPTION_NAME: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
+        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_CREDENTIALS_SECONDARY.subscriptionId }}
         ResourceGroupName: ${{ secrets.AZURE_RG_SHAREDNETWORK }}
       run: .\02-ExpressRoute\Scripts\CreateERCircuitConnection.ps1
       shell: pwsh

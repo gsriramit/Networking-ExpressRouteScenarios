@@ -1,15 +1,25 @@
 # Login to Azure using Service Principal credentials from Github Secrets
 Write-Output "Logging in to Azure with a service principal..."
+
+# Retrieve the plain text password for use with `Get-Credential` in the next command.
+$Env:SP_CLIENT_SECRET | ConvertFrom-SecureString -AsPlainText
+
+$pscredential = Get-Credential -UserName $Env:SP_CLIENT_ID
+Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $Env:SP_TENANT_ID
+
+<#
 az login `
     --service-principal `
     --username $Env:SP_CLIENT_ID `
     --password $Env:SP_CLIENT_SECRET `
     --tenant $Env:SP_TENANT_ID
+    #>
 Write-Output "Done"
 
+Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
+
 # Select Azure subscription
-az account set `
-    --subscription $Env:AZURE_SUBSCRIPTION_NAME
+Set-AzContext  -Subscription $Env:AZURE_SUBSCRIPTION_ID
 
 # Create the VM configuration object
 $ResourceGroupName = $Env:ResourceGroupName
