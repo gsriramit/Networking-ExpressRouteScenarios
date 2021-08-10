@@ -10,7 +10,7 @@
         },
         "networkSecurityGroupId": {
             "type": "string",
-            "defaultValue": "[concat(resourcegroup().id,'/providers/Microsoft.Network/networkSecurityGroups/hub_nsg_dns')]"
+            "defaultValue": "[concat(resourcegroup().id,'/providers/Microsoft.Network/networkSecurityGroups/hub_nsg')]"
         },
         "subnetName": {
             "type": "string"
