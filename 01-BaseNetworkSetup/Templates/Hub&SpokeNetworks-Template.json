@@ -1,0 +1,317 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "hubNetworkName": {
+            "type": "string"
+        },
+        "resourceGroup": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
+        },
+        "hubAddressSpaces": {
+            "type": "array"
+        },
+        "hub_subnet0_name": {
+            "type": "string"
+        },
+        "hub_subnet0_addressRange": {
+            "type": "string"
+        },
+        "hub_subnet1_name": {
+            "type": "string"
+        },
+        "hub_subnet1_addressRange": {
+            "type": "string"
+        },
+        "hub_ddosProtectionPlanEnabled": {
+            "type": "bool"
+        },
+        "hub_firewallEnabled": {
+            "type": "bool"
+        },
+        "hub_bastionEnabled": {
+            "type": "bool"
+        },
+        "hub_NSGName": {
+            "type": "string"
+        },
+        "hub_NSGRules": {
+            "type": "array"
+        },
+        "spoke_NSGRules": {
+            "type": "array"
+        },
+        "spoke_NSGName": {
+            "type": "string"
+        },
+        "spokeVnet-1-Name": {
+            "type": "string",
+            "metadata": {
+                "description": "Name for vNet 2"
+            }
+        },
+        "hub_bastionName": {
+            "type": "string"
+        },
+        "hub_publicIpAddressForBastion": {
+            "type": "string"
+        },
+        "hub_bastionSubnetName": {
+            "type": "string"
+        },
+        "hub_bastionSubnetAddressSpace": {
+            "type": "string"
+        },
+        "spokeNetworkName": {
+            "type": "string"
+        },
+        "spoke_subnet0_name": {
+            "type": "string"
+        },
+        "spoke_subnet0_addressRange": {
+            "type": "string"
+        },
+        "spoke_ddosProtectionPlanEnabled": {
+            "type": "bool"
+        },
+        "spoke_firewallEnabled": {
+            "type": "bool"
+        },
+        "spoke_bastionEnabled": {
+            "type": "bool"
+        },
+        "spoke_bastionName": {
+            "type": "string"
+        },
+        "spoke_bastionSubnetName": {
+            "type": "string"
+        },
+        "spoke_bastionSubnetAddressSpace": {
+            "type": "string"
+        },
+        "spoke_publicIpAddressForBastion": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "HubtoSpoke1PeeringName": "HubToSpoke1Peering",
+        "Spoke1ToHubPeeringName": "Spoke1ToHubPeering"
+    },
+    "resources": [
+        {
+            "name": "[parameters('hub_NSGName')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-02-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "securityRules": "[parameters('hub_NSGRules')]"
+            }
+        },        
+        {
+            "name": "[parameters('hubNetworkName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-05-01",
+            "location": "[parameters('location')]",
+            "tags": {
+                "DNSTesting": "HubVnet",
+                "CostCenter": "dev"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('hub_subnet0_name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hub_subnet0_addressRange')]"
+                        }
+                    },
+                    {
+                        "name": "[parameters('hub_subnet1_name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hub_subnet1_addressRange')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('hub_NSGName'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[parameters('hub_bastionSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('hub_bastionSubnetAddressSpace')]"
+                        }
+                    }
+                ],
+                "enableDdosProtection": "[parameters('hub_ddosProtectionPlanEnabled')]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2020-05-01",
+                    "type": "virtualNetworkPeerings",
+                    "name": "[variables('HubToSpoke1PeeringName')]",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('hubNetworkName'))]",
+                        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('spokeVnet-1-Name'))]"
+                    ],
+                    "comments": "This is the peering from the Hub Vnet to the first spoke Vnet",
+                    "properties": {
+                        "allowVirtualNetworkAccess": true,
+                        "allowForwardedTraffic": true,
+                        "allowGatewayTransit": true,
+                        "useRemoteGateways": false,
+                        "remoteVirtualNetwork": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('spokeVnet-1-Name'))]"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-08-01",
+            "name": "[parameters('hub_publicIpAddressForBastion')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            }
+        },
+        {
+            "type": "Microsoft.Network/bastionHosts",
+            "apiVersion": "2019-04-01",
+            "name": "[parameters('hub_bastionName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId(parameters('resourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('hubNetworkName'))]",
+                "[resourceId(parameters('resourceGroup'), 'Microsoft.Network/publicIpAddresses', parameters('hub_publicIpAddressForBastion'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "IpConf",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId(parameters('resourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('hubNetworkName'), parameters('hub_bastionSubnetName'))]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId(parameters('resourceGroup'), 'Microsoft.Network/publicIpAddresses', parameters('hub_publicIpAddressForBastion'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[parameters('spoke_NSGName')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-02-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "securityRules": "[parameters('spoke_NSGRules')]"
+            }
+        },     
+        {
+            "name": "[parameters('spokeNetworkName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-05-01",
+            "location": "[parameters('location')]",
+            "tags": {
+                "CostCenter": "dev"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.1.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('spoke_subnet0_name')]",                      
+                        "properties": {
+                            "addressPrefix": "[parameters('spoke_subnet0_addressRange')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('spoke_NSGName'))]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "[parameters('spoke_bastionSubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('spoke_bastionSubnetAddressSpace')]"
+                        }
+                    }
+                ],
+                "enableDdosProtection": "[parameters('spoke_ddosProtectionPlanEnabled')]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2020-05-01",
+                    "type": "virtualNetworkPeerings",
+                    "name": "[variables('Spoke1ToHubPeeringName')]",
+                    "location": "[parameters('location')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('spokeNetworkName'))]",
+                        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('hubNetworkName'))]"
+                    ],
+                    "comments": "This is the peering from the Spoke Vnet to the Hub VNet ",
+                    "properties": {
+                        "allowVirtualNetworkAccess": true,
+                        "allowForwardedTraffic": true,
+                        "allowGatewayTransit": false,
+                        "useRemoteGateways": false,
+                        "remoteVirtualNetwork": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('hubNetworkName'))]"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-08-01",
+            "name": "[parameters('spoke_publicIpAddressForBastion')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+            }
+        },
+        {
+            "type": "Microsoft.Network/bastionHosts",
+            "apiVersion": "2019-04-01",
+            "name": "[parameters('spoke_bastionName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId(parameters('resourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('spokeNetworkName'))]",
+                "[resourceId(parameters('resourceGroup'), 'Microsoft.Network/publicIpAddresses', parameters('spoke_publicIpAddressForBastion'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "IpConf",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId(parameters('resourceGroup'), 'Microsoft.Network/virtualNetworks/subnets', parameters('spokeNetworkName'), parameters('spoke_bastionSubnetName'))]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId(parameters('resourceGroup'), 'Microsoft.Network/publicIpAddresses', parameters('spoke_publicIpAddressForBastion'))]"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

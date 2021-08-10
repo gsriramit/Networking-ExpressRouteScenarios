@@ -15,7 +15,7 @@
             "value": "ExpressRoute"
         },
         "subnetId": {
-            "value": "/subscriptions/83343ae6-3277-475f-8be1-946e5d6d9359/resourceGroups/rg-sharednetwork-dev01/providers/Microsoft.Network/virtualNetworks/vnet-hub-southeastaasia-dev01/subnets/GatewaySubnet"
+            "value": ""
         },
         "newPublicIpAddressName": {
             "value": "pip-ergw-dev01"
