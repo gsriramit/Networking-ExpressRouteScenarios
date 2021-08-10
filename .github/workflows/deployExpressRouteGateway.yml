@@ -27,21 +27,18 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
         resourceGroupName: ${{ secrets.AZURE_RG_SHAREDNETWORK }}
-        template: ./02-ExpressRoute/expressrouteDeployment.json
-        parameters: ./02-ExpressRoute/expressrouteDeploymentParameters.json
+        template: ./02-ExpressRoute/Templates/expressrouteDeployment.json
+        parameters: ./02-ExpressRoute/Templates/expressrouteDeploymentParameters.json
         
-    - name: Azure PowerShell Action for GW to Circuit Connection
-      uses: Azure/powershell@v1
-      with:
-        # Specify the Az PowerShell script here.
-        inlineScript: 
-          $circuit = Get-AzExpressRouteCircuit -Name "er-primary-sg-dev01" -ResourceGroupName ${{ secrets.AZURE_RG_SHAREDNETWORK }}
-          $gw = Get-AzVirtualNetworkGateway -Name "ergw-primary-seasia-dev01" -ResourceGroupName ${{ secrets.AZURE_RG_SHAREDNETWORK }}
-          $connection = New-AzVirtualNetworkGatewayConnection -Name "ERConnection" -ResourceGroupName ${{ secrets.AZURE_RG_SHAREDNETWORK }} -Location "Southeast Asia" -VirtualNetworkGateway1 $gw -PeerId $circuit.Id -ConnectionType ExpressRoute
-        # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
-        azPSVersion: "latest"
-        # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
-        errorActionPreference: "stop"
+    - name: RunPowershellScriptFromRepo
+      env: #Set secrets as environment variables
+        SP_CLIENT_ID: ${{ secrets.AZURE_CREDENTIALS_SECONDARY.clientId }}
+        SP_CLIENT_SECRET: ${{ secrets.AZURE_CREDENTIALS_SECONDARY.clientsecret }}
+        SP_TENANT_ID: ${{ secrets.AZURE_CREDENTIALS_SECONDARY.tenantId }}
+        AZURE_SUBSCRIPTION_NAME: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
+        ResourceGroupName: ${{ secrets.AZURE_RG_SHAREDNETWORK }}
+      run: .\Scripts\CreateERCircuitConnection.ps1
+      shell: pwsh
 
       # output containerName variable from template
     # - run: echo ${{ steps.deploy.outputs.containerName }}
