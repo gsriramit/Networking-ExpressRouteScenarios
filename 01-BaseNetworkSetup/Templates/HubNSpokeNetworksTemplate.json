@@ -261,7 +261,7 @@
                         "allowVirtualNetworkAccess": true,
                         "allowForwardedTraffic": true,
                         "allowGatewayTransit": false,
-                        "useRemoteGateways": false,
+                        "useRemoteGateways": true,
                         "remoteVirtualNetwork": {
                             "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('hubNetworkName'))]"
                         }
