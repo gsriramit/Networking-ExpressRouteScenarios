@@ -31,6 +31,14 @@ jobs:
         template: ./02-ExpressRoute/Templates/expressrouteDeployment.json
         parameters: ./02-ExpressRoute/Templates/expressrouteDeploymentParameters.json
 
+    - name: Run ARM deploy for Express Route Gateway
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
+        resourceGroupName: ${{ secrets.AZURE_RG_SHAREDNETWORK }}
+        template: ./01-BaseNetworkSetup/Templates/TestServerTemplate.json
+        parameters: ./01-BaseNetworkSetup/Templates/TestServerParameters.json
+
 
     - name: Azure PowerShell Action
       uses: Azure/powershell@v1
