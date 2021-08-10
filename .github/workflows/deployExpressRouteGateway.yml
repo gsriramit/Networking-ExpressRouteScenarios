@@ -1,5 +1,5 @@
 on: workflow_dispatch
-name: Azure ARM Template Deployment for Base Networking & ER-GW
+name: Azure ARM Template Deployment for Base Networking and ER-GW
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -30,7 +30,7 @@ jobs:
         template: ./02-ExpressRoute/expressrouteDeployment.json
         parameters: ./02-ExpressRoute/expressrouteDeploymentParameters.json
         
-    - name: Azure PowerShell Action
+    - name: Azure PowerShell Action for GW to Circuit Connection
       uses: Azure/powershell@v1
       with:
         # Specify the Az PowerShell script here.
