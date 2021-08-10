@@ -8,14 +8,8 @@
         "networkInterfaceName": {
             "value": "vm-wl-dev-001713"
         },
-        "networkSecurityGroupId": {
-            "value": null
-        },
         "subnetName": {
             "value": "MgmtSubnet"
-        },
-        "virtualNetworkId": {
-            "value": null
         },
         "virtualMachineName": {
             "value": "vm-wl-dev-01"
@@ -33,7 +27,7 @@
             "value": "adminaccount"
         },
         "adminPassword": {
-            "value": null
+            "value": "adminpwd#123"
         },
         "patchMode": {
             "value": "AutomaticByOS"
@@ -57,7 +51,7 @@
             "value": "en"
         },
         "autoShutdownNotificationEmail": {
-            "value": ""
+            "value": "gsriramit@gmail.com"
         }
     }
 }
