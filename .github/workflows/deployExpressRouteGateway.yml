@@ -31,7 +31,7 @@ jobs:
         template: ./02-ExpressRoute/Templates/expressrouteDeployment.json
         parameters: ./02-ExpressRoute/Templates/expressrouteDeploymentParameters.json
 
-    - name: Run ARM deploy for Express Route Gateway
+    - name: Run ARM deploy for Test Servers in Hub
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
