@@ -1,5 +1,5 @@
 on: workflow_dispatch
-name: Azure ARM Template Deployment for Base Networking and ER-GW
+name: AzureARMDeploymentforBaseNetworkingandERGW
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
