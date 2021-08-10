@@ -1,5 +1,5 @@
 on: workflow_dispatch
-name: Azure ARM Template Deployment for ER-GW
+name: Azure ARM Template Deployment for Base Networking & ER-GW
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -11,16 +11,37 @@ jobs:
       # Log into Azure
     - uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      # Deploy ARM template
-    - name: Run ARM deploy
+        creds: ${{ secrets.AZURE_CREDENTIALS_SECONDARY }}
+        
+    - name: Run ARM deploy for Base Network
       uses: azure/arm-deploy@v1
       with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-        resourceGroupName: ${{ secrets.AZURE_RG }}
-        template: ./ExpressRoute/expressrouteDeployment.json
-        parameters: ./ExpressRoute/expressrouteDeploymentParameters.json
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
+        resourceGroupName: ${{ secrets.AZURE_RG_SHAREDNETWORK }}
+        template: ./01-BaseNetworkSetup/Templates/Hub&SpokeNetworks-Template.json
+        parameters: ./01-BaseNetworkSetup/Templates/Hub&SpokeNetworks-Parameters.json
+
+      # Deploy ARM template
+    - name: Run ARM deploy for Express Route Gateway
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
+        resourceGroupName: ${{ secrets.AZURE_RG_SHAREDNETWORK }}
+        template: ./02-ExpressRoute/expressrouteDeployment.json
+        parameters: ./02-ExpressRoute/expressrouteDeploymentParameters.json
+        
+    - name: Azure PowerShell Action
+      uses: Azure/powershell@v1
+      with:
+        # Specify the Az PowerShell script here.
+        inlineScript: 
+          $circuit = Get-AzExpressRouteCircuit -Name "er-primary-sg-dev01" -ResourceGroupName ${{ secrets.AZURE_RG_SHAREDNETWORK }}
+          $gw = Get-AzVirtualNetworkGateway -Name "ergw-primary-seasia-dev01" -ResourceGroupName ${{ secrets.AZURE_RG_SHAREDNETWORK }}
+          $connection = New-AzVirtualNetworkGatewayConnection -Name "ERConnection" -ResourceGroupName ${{ secrets.AZURE_RG_SHAREDNETWORK }} -Location "Southeast Asia" -VirtualNetworkGateway1 $gw -PeerId $circuit.Id -ConnectionType ExpressRoute
+        # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
+        azPSVersion: "latest"
+        # Select the value of the ErrorActionPreference variable for executing the script. Options: stop, continue, silentlyContinue. Default is Stop.
+        errorActionPreference: "stop"
 
       # output containerName variable from template
     # - run: echo ${{ steps.deploy.outputs.containerName }}
