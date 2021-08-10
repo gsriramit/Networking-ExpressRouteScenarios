@@ -1,23 +1,24 @@
 # Login to Azure using Service Principal credentials from Github Secrets
+<#
 Write-Output "Logging in to Azure with a service principal..."
 
 $pscredential = New-Object -TypeName System.Management.Automation.PSCredential($Env:SP_CLIENT_ID, $Env:SP_CLIENT_SECRET)
 Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $Env:SP_TENANT_ID
 
-<#
+
 az login `
     --service-principal `
     --username $Env:SP_CLIENT_ID `
     --password $Env:SP_CLIENT_SECRET `
     --tenant $Env:SP_TENANT_ID
-    #>
+
 Write-Output "Done"
 
 Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
 
 # Select Azure subscription
 Set-AzContext  -Subscription $Env:AZURE_SUBSCRIPTION_ID
-
+#>
 # Create the VM configuration object
 $ResourceGroupName = $Env:ResourceGroupName
 $circuitName = "er-primary-sg-dev01"
