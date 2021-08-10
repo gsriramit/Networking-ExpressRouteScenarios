@@ -117,7 +117,6 @@
             "apiVersion": "2020-05-01",
             "location": "[parameters('location')]",
             "tags": {
-                "DNSTesting": "HubVnet",
                 "CostCenter": "dev"
             },
             "properties": {
@@ -136,10 +135,7 @@
                     {
                         "name": "[parameters('hub_subnet1_name')]",
                         "properties": {
-                            "addressPrefix": "[parameters('hub_subnet1_addressRange')]",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('hub_NSGName'))]"
-                            }
+                            "addressPrefix": "[parameters('hub_subnet1_addressRange')]"
                         }
                     },
                     {
@@ -238,10 +234,7 @@
                     {
                         "name": "[parameters('spoke_subnet0_name')]",                      
                         "properties": {
-                            "addressPrefix": "[parameters('spoke_subnet0_addressRange')]",
-                            "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('spoke_NSGName'))]"
-                            }
+                            "addressPrefix": "[parameters('spoke_subnet0_addressRange')]"
                         }
                     },
                     {

@@ -14,9 +14,6 @@
         "gatewayType": {
             "value": "ExpressRoute"
         },
-        "subnetId": {
-            "value": ""
-        },
         "newPublicIpAddressName": {
             "value": "pip-ergw-dev01"
         }
