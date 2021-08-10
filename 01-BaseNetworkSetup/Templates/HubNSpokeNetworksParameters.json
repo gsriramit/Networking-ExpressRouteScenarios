@@ -43,11 +43,6 @@
         "spokeNetworkName": {
             "value": "spoke-vnet"
         },
-        "spokeAddressSpaces": {
-            "value": [
-                "10.1.0.0/16"
-            ]
-        },
         "spoke_subnet0_name": {
             "value": "workloadsubnet"
         },
@@ -130,9 +125,6 @@
         },      
         "hub_publicIpAddressForBastion": {
             "value": "pip-bastion-vm0"
-        },
-        "HubVnetName": {
-            "value":"hub-vnet"        
         }
     }
 }
