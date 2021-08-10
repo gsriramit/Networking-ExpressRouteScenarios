@@ -20,7 +20,7 @@ Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
 Set-AzContext  -Subscription $Env:AZURE_SUBSCRIPTION_ID
 #>
 # Create the VM configuration object
-$ResourceGroupName = $Env:ResourceGroupName
+$ResourceGroupName = "rg-sharednetwork-dev01"
 $circuitName = "er-primary-sg-dev01"
 $vnetGatewayName = "ergw-primary-seasia-dev01"
 $location= "Southeast Asia"
