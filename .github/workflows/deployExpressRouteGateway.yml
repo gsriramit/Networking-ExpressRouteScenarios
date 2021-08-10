@@ -12,6 +12,7 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS_SECONDARY }}
+        enable-AzPSSession: true
         
     - name: Run ARM deploy for Base Network
       uses: azure/arm-deploy@v1
