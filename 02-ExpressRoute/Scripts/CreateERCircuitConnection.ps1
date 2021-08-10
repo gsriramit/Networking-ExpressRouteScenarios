@@ -1,10 +1,7 @@
 # Login to Azure using Service Principal credentials from Github Secrets
 Write-Output "Logging in to Azure with a service principal..."
 
-# Retrieve the plain text password for use with `Get-Credential` in the next command.
-$Env:SP_CLIENT_SECRET | ConvertFrom-SecureString -AsPlainText
-
-$pscredential = Get-Credential -UserName $Env:SP_CLIENT_ID
+$pscredential = New-Object -TypeName System.Management.Automation.PSCredential($Env:SP_CLIENT_ID, $Env:SP_CLIENT_SECRET)
 Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $Env:SP_TENANT_ID
 
 <#
