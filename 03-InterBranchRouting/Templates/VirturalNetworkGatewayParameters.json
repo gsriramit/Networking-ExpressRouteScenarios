@@ -26,6 +26,12 @@
         "newPublicIpAddressName": {
             "value": "pip-hub-vgw-dev01"
         },
+        "activeActive": {
+            "value": true
+        },
+        "activeActiveGatewayNewPublicIpAddressName": {
+            "value": "pip-vgw-02"
+        },
         "enableBgp": {
             "value": true
         },

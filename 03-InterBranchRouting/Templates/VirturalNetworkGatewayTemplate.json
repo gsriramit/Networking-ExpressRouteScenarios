@@ -36,6 +36,12 @@
         "newPublicIpAddressName": {
             "type": "string"
         },
+         "activeActive": {
+            "type": "bool"
+        },
+        "activeActiveGatewayNewPublicIpAddressName": {
+            "type": "string"
+        },
         "enableBgp": {
             "type": "bool"
         },
@@ -59,7 +65,7 @@
         }
     },
     "variables":{
-         "subnetId": "[concat(toLower(resourceGroup().id), '/providers/Microsoft.Network/virtualNetworks/', toLower(parameters('vnetName')),'/subnets/GatewaySubnet')]"        
+         "subnetId": "[concat(resourceGroup().id, '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'),'/subnets/GatewaySubnet')]"        
     },
     "resources": [
         {
@@ -68,6 +74,7 @@
             "type": "Microsoft.Network/virtualNetworkGateways",
             "location": "[parameters('location')]",
             "dependsOn": [
+                 "[concat('Microsoft.Network/publicIPAddresses/', parameters('activeActiveGatewayNewPublicIpAddressName'))]",
                 "[concat('Microsoft.Network/publicIPAddresses/', parameters('newPublicIpAddressName'))]"
             ],
             "tags": {
@@ -89,8 +96,21 @@
                                 "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
                             }
                         }
+                    },
+                    {
+                        "name": "activeActive",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIpAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', parameters('activeActiveGatewayNewPublicIpAddressName'))]"
+                            },
+                            "subnet": {
+                                "id": "[variables('subnetId')]"
+                            }
+                        }
                     }
                 ],
+                "activeActive": "[parameters('activeActive')]",
                 "enableBgp": "[parameters('enableBgp')]",
                 "bgpSettings": {
                     "asn": "[parameters('asn')]"
@@ -101,6 +121,15 @@
                     "name": "[parameters('sku')]",
                     "tier": "[parameters('sku')]"
                 }
+            }
+        },
+        {
+            "apiVersion": "2020-08-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('activeActiveGatewayNewPublicIpAddressName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
             }
         },
         {
