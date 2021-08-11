@@ -1,0 +1,132 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "type": "string"
+        },
+        "location": {
+            "type": "string"
+        },
+        "sku": {
+            "type": "string"
+        },
+        "gatewayType": {
+            "type": "string",
+            "defaultValue": "Vpn",
+            "allowedValues": [
+                "Vpn",
+                "ExpressRoute"
+            ]
+        },
+        "vpnGatewayGeneration": {
+            "type": "string"
+        },
+        "vpnType": {
+            "type": "string",
+            "defaultValue": "RouteBased",
+            "allowedValues": [
+                "RouteBased",
+                "PolicyBased"
+            ]
+        },
+        "vnetName":{
+            "type": "string"
+        },    
+        "newPublicIpAddressName": {
+            "type": "string"
+        },
+        "enableBgp": {
+            "type": "bool"
+        },
+        "asn": {
+            "type": "int"
+        },
+        "localNetworkGatewayName": {
+            "type": "string"
+        },
+        "addressPrefixes": {
+            "type": "array"
+        },
+        "lgwasn": {
+            "type": "int"
+        },
+        "bgpPeeringAddress": {
+            "type": "string"
+        },
+        "gatewayIpAddress": {
+            "type": "string"
+        }
+    },
+    "variables":{
+         "subnetId": "[concat(resourceGroup().id, 'providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'),'/subnets/GatewaySubnet')]"        
+    },
+    "resources": [
+        {
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('name')]",
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/', parameters('newPublicIpAddressName'))]"
+            ],
+            "tags": {
+                "CostCenter": "dev",
+                "Project": "vwan",
+                "resource": "vpn gateway"
+            },
+            "properties": {
+                "gatewayType": "[parameters('gatewayType')]",
+                "ipConfigurations": [
+                    {
+                        "name": "default",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('subnetId')]"
+                            },
+                            "publicIpAddress": {
+                                "id": "[resourceId('rg-azvwanexp-dev01', 'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
+                            }
+                        }
+                    }
+                ],
+                "enableBgp": "[parameters('enableBgp')]",
+                "bgpSettings": {
+                    "asn": "[parameters('asn')]"
+                },
+                "vpnType": "[parameters('vpnType')]",
+                "vpnGatewayGeneration": "[parameters('vpnGatewayGeneration')]",
+                "sku": {
+                    "name": "[parameters('sku')]",
+                    "tier": "[parameters('sku')]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2019-02-01",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[parameters('newPublicIpAddressName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+         {
+            "name": "[parameters('localNetworkGatewayName')]",
+            "type": "Microsoft.Network/localNetworkGateways",
+            "apiVersion": "2019-02-01",
+            "location": "[parameters('location')]",
+            "properties": {
+                "localNetworkAddressSpace": {
+                    "addressPrefixes": "[parameters('addressPrefixes')]"
+                },
+                "gatewayIpAddress": "[parameters('gatewayIpAddress')]",
+                "bgpSettings": {
+                    "asn": "[parameters('lgwasn')]",
+                    "bgpPeeringAddress": "[parameters('bgpPeeringAddress')]"
+                }
+            }
+        }
+    ]
+}
