@@ -8,16 +8,14 @@
         "networkInterfaceName": {
             "type": "string"
         },
-        "networkSecurityGroupId": {
-            "type": "string",
-            "defaultValue": "[concat(resourcegroup().id,'/providers/Microsoft.Network/networkSecurityGroups/hub_nsg')]"
+        "nsgName":{
+            "type": "string"
         },
         "subnetName": {
             "type": "string"
         },
-        "virtualNetworkId": {
-            "type": "string",
-            "defaultValue": "[concat(resourcegroup().id,'/providers/Microsoft.Network/virtualNetworks/hub-vnet')]"
+        "virtualNetworkName":{
+            "type":"string"
         },
         "virtualMachineName": {
             "type": "string"
@@ -63,8 +61,8 @@
         }
     },
     "variables": {
-        "nsgId": "[parameters('networkSecurityGroupId')]",
-        "vnetId": "[parameters('virtualNetworkId')]",
+        "nsgId":"[concat(resourcegroup().id,'/providers/Microsoft.Network/networkSecurityGroups/', parameters('nsgName'))]",
+        "vnetId": "[concat(resourcegroup().id,'/providers/Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]"
     },
     "resources": [
