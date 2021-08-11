@@ -9,7 +9,7 @@
             "value": "hub-vnet"
         },
         "resourceGroup": {
-            "value": "rg-sharednetwork-dev01"
+            "value": "rg-networking-dev01"
         },
         "hubAddressSpaces": {
             "value": [
@@ -20,7 +20,7 @@
             "value": "GatewaySubnet"
         },
         "hub_subnet0_addressRange": {
-            "value": "10.0.2.0/27"
+            "value": "10.0.2.0/26"
         },
         "hub_subnet1_name": {
             "value": "MgmtSubnet"

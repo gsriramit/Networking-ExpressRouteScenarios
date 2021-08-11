@@ -6,22 +6,22 @@
             "value": "southeastasia"
         },
         "networkInterfaceName": {
-            "value": "vm-wl-dev-001713"
+            "value": "vm-wl-dev-00022"
         },
         "subnetName": {
-            "value": "MgmtSubnet"
+            "value": "workloadsubnet"
         },
         "nsgName":{
-            "value": "hub_nsg"
+            "value": "spoke_nsg"
         },
         "virtualNetworkName":{
-            "value":"hub-vnet"
+            "value":"spoke-vnet"
         },
         "virtualMachineName": {
-            "value": "vm-wl-dev-01"
+            "value": "vm-wl-dev-02"
         },
         "virtualMachineComputerName": {
-            "value": "vm-wl-dev-01"
+            "value": "vm-wl-dev-02"
         },
         "osDiskType": {
             "value": "StandardSSD_LRS"
