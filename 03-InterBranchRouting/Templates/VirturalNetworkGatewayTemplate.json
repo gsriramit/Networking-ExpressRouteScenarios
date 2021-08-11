@@ -59,7 +59,7 @@
         }
     },
     "variables":{
-         "subnetId": "[concat(resourceGroup().id, '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'),'/subnets/GatewaySubnet')]"        
+         "subnetId": "[concat(toLower(resourceGroup().id), '/providers/Microsoft.Network/virtualNetworks/', toLower(parameters('vnetName')),'/subnets/GatewaySubnet')]"        
     },
     "resources": [
         {
