@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "vnetName": {
+        "value": "hub-vnet"
+      },
+      "vnetIpPrefix": {
+        "value": "10.0.0.0/16"
+      },
+      "vnetNew-or-Existing": {
+        "value": "Existing"
+      },
+      "routeServerSubnetIpPrefix": {
+        "value": "10.0.10.0/27"
+      },
+      "firstRouteServerName": {
+        "value": "routeserver"
+      },
+      "routeServerBgpConnectionName": {
+        "value": "conn1"
+      },
+      "peerAsn": {
+        "value": "65002"
+      },
+      "peerIp": {
+        "value": "10.0.1.4"
+      }
+    }
+  }

@@ -86,7 +86,7 @@
                                 "id": "[variables('subnetId')]"
                             },
                             "publicIpAddress": {
-                                "id": "[resourceId('rg-azvwanexp-dev01', 'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', parameters('newPublicIpAddressName'))]"
                             }
                         }
                     }
