@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "value": "centralindia"
+            "value": "southeastasia"
         },
         "name": {
             "value": "vgw-hub-dev01"
