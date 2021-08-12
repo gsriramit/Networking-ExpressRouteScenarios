@@ -23,21 +23,7 @@ jobs:
         parameters: ./03-InterBranchRouting/Templates/VirturalNetworkGatewayParameters.json
 
       # Deploy ARM template
-    - name: Run ARM deploy for Route Server
-      uses: azure/arm-deploy@v1
-      with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
-        resourceGroupName: ${{ secrets.AZURE_RG_SHAREDNETWORK }}
-        template: ./03-InterBranchRouting/Templates/RouteServerTemplate.json
-        parameters: ./03-InterBranchRouting/Templates/RouteServerParameters.json
     
-    - name: Azure PowerShell Action
-      uses: Azure/powershell@v1
-      with:
-          inlineScript: 
-            .\03-InterBranchRouting\Scripts\PostDeploymentScript.ps1
-        # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
-          azPSVersion: latest 
 
       # output containerName variable from template
     # - run: echo ${{ steps.deploy.outputs.containerName }}
