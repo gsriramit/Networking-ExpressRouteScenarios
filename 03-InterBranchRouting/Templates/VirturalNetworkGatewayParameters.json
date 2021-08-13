@@ -45,13 +45,19 @@
             "value": []
         },
         "gatewayIpAddress": {
-            "value": "49.37.211.79"
+            "value": "49.37.211.199"
         },
         "lgwasn": {
             "value": 65050
         },
         "bgpPeeringAddress": {
             "value": "192.168.29.52"
+        },
+        "connectionName":{
+            "value": "conn-s2s-branch-india"
+        },
+        "sharedKey":{
+            "value": "testpask987"
         }
     }
 }

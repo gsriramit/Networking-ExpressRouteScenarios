@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "name": {
+        "gatewayName": {
             "type": "string"
         },
         "location": {
@@ -30,13 +30,13 @@
                 "PolicyBased"
             ]
         },
-        "vnetName":{
+        "vnetName": {
             "type": "string"
-        },    
+        },
         "newPublicIpAddressName": {
             "type": "string"
         },
-         "activeActive": {
+        "activeActive": {
             "type": "bool"
         },
         "activeActiveGatewayNewPublicIpAddressName": {
@@ -62,19 +62,25 @@
         },
         "gatewayIpAddress": {
             "type": "string"
+        },
+        "connectionName":{
+            "type": "string"
+        },
+        "sharedKey":{
+            "type": "string"
         }
     },
-    "variables":{
-         "subnetId": "[concat(resourceGroup().id, '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'),'/subnets/GatewaySubnet')]"        
+    "variables": {
+        "subnetId": "[concat(resourceGroup().id, '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'),'/subnets/GatewaySubnet')]"
     },
     "resources": [
         {
             "apiVersion": "2020-11-01",
-            "name": "[parameters('name')]",
+            "name": "[parameters('gatewayName')]",
             "type": "Microsoft.Network/virtualNetworkGateways",
             "location": "[parameters('location')]",
             "dependsOn": [
-                 "[concat('Microsoft.Network/publicIPAddresses/', parameters('activeActiveGatewayNewPublicIpAddressName'))]",
+                "[concat('Microsoft.Network/publicIPAddresses/', parameters('activeActiveGatewayNewPublicIpAddressName'))]",
                 "[concat('Microsoft.Network/publicIPAddresses/', parameters('newPublicIpAddressName'))]"
             ],
             "tags": {
@@ -141,7 +147,7 @@
                 "publicIPAllocationMethod": "Dynamic"
             }
         },
-         {
+        {
             "name": "[parameters('localNetworkGatewayName')]",
             "type": "Microsoft.Network/localNetworkGateways",
             "apiVersion": "2019-02-01",
@@ -155,6 +161,27 @@
                     "asn": "[parameters('lgwasn')]",
                     "bgpPeeringAddress": "[parameters('bgpPeeringAddress')]"
                 }
+            }
+        },
+        {
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('connectionName')]",
+            "type": "Microsoft.Network/connections",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('gatewayName'))]",
+                "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGatewayName'))]"
+            ],
+            "properties": {
+                "virtualNetworkGateway1": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('gatewayName'))]"
+                },
+                "localNetworkGateway2": {
+                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGatewayName'))]"
+                },
+                "connectionType": "IPsec",
+                "routingWeight": 10,
+                "sharedKey": "[parameters('sharedKey')]"
             }
         }
     ]
