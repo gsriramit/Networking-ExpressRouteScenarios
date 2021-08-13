@@ -181,7 +181,8 @@
                 },
                 "connectionType": "IPsec",
                 "routingWeight": 10,
-                "sharedKey": "[parameters('sharedKey')]"
+                "sharedKey": "[parameters('sharedKey')]",
+                "enableBgp": true
             }
         }
     ]
