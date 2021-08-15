@@ -1,5 +1,5 @@
 on: workflow_dispatch
-name: AzureARMDeploymentforBaseNetworkingandERGW
+name: ResourceCleanup
 jobs:
   build-and-deploy:
     runs-on: windows-latest
