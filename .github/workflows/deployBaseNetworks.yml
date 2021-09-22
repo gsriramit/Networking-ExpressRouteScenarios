@@ -1,5 +1,5 @@
 on: workflow_dispatch
-name: ResourceCleanup
+name: AzureARMDeploymentforBaseNetworking
 jobs:
   build-and-deploy:
     runs-on: windows-latest
@@ -14,13 +14,15 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS_SECONDARY }}
         enable-AzPSSession: true
         
-    - name: Azure PowerShell Action
-      uses: Azure/powershell@v1
+    - name: Run ARM deploy for Base Network
+      uses: azure/arm-deploy@v1
       with:
-          inlineScript: 
-            .\ResourceCleanup\Scripts\Cleanup.ps1
-        # Azure PS version to be used to execute the script, example: 1.8.0, 2.8.0, 3.4.0. To use the latest version, specify "latest".
-          azPSVersion: latest 
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
+        resourceGroupName: ${{ secrets.AZURE_RG_SHAREDNETWORK }}
+        template: ./01-BaseNetworkSetup/Templates/HubNSpokeNetworksTemplate.json
+        parameters: ./01-BaseNetworkSetup/Templates/HubNSpokeNetworksParameters.json
+
+    
 
       # output containerName variable from template
     # - run: echo ${{ steps.deploy.outputs.containerName }}
