@@ -1,5 +1,5 @@
 # Express Route Circuit & Peerings
-An azure express route circuit for private connectivity between your on-premise and Azure Cloud can be designed using one of the many connectivity models.For this lab, I used the conventional setup through a **Cloud Exchange Co-location**. You can refer to the following article to understand the difference between the various models and identify the one that would suit your requirement [Azure ExpressRoute Connectivity Models](https://docs.microsoft.com/en-us/azure/expressroute/expressroute-connectivity-models)  
+An azure express route circuit for private connectivity between your on-premise and Azure Cloud can be designed using one of the many connectivity models.For this lab, I used the conventional setup through a **Cloud Exchange Co-location**. You can refer to the following article to understand the differences between the various models and identify the one that would suit your requirement [Azure ExpressRoute Connectivity Models](https://docs.microsoft.com/en-us/azure/expressroute/expressroute-connectivity-models)  
 
 ## High Level Network diagram (from the MS docs)
 ![image](https://user-images.githubusercontent.com/13979783/134936489-0eafa367-4338-45eb-9c62-ca90557682f1.png)
