@@ -29,6 +29,8 @@ An azure express route circuit for private connectivity between your on-premise 
 | Azure Edge Router BGP ASN                                       | 12076 (official azure asn)                                         |
 
 ## Post-deployment automation
+
+### Express Route Circuit to Gateway Connection
 Connection from the express route gateway to the circuit can either be created through an ARM template or using PS. In this lab, we will be using a powershell script to establish the connection with the circuit after the deployment of the gateway is done.  
 ```
 $circuit = Get-AzExpressRouteCircuit -Name $circuitName -ResourceGroupName $CoreNetworkRGName
@@ -37,3 +39,23 @@ $connection = New-AzVirtualNetworkGatewayConnection -Name "ERConnection" `
  -ResourceGroupName $ResourceGroupName -Location $location -VirtualNetworkGateway1 $gw `
   -PeerId $circuit.Id -ConnectionType ExpressRoute
  ```
+ 
+ ### Virtual Network Peering between the Hub&Spoke Networks
+ When peering the Hub and the spoke networks, we would want the remote gateway transit feature enabled in the Hub so that the spoke networks can use the express route gateway to reach the On-Premise Network. So the virtual network peering with the "AllowGatewayTransit" and "UseRemoteGateways" cannot be enabled until the express route gateway is installed.
+ ```
+ # Enable Gateway transit on the Hub side of the peering
+# Get the virtual network peering
+$hubtospokePeeringObj = Get-AzVirtualNetworkPeering -VirtualNetworkName $hubVnetName -ResourceGroupName $ResourceGroupName -Name $hubToSpokePeering
+# Change AllowGatewayTransit property
+$hubtospokePeeringObj.AllowGatewayTransit = $True
+# Update the virtual network peering
+Set-AzVirtualNetworkPeering -VirtualNetworkPeering $hubtospokePeeringObj
+
+# Use Remote Gateway  for transit on the Peer side of the peering
+  # Get the virtual network peering 
+$spokeToHubPeeringObj = Get-AzVirtualNetworkPeering -VirtualNetworkName $spokeVnetName -ResourceGroupName $ResourceGroupName -Name $spokeToHubPeering
+# Change the UseRemoteGateways property
+$spokeToHubPeeringObj.UseRemoteGateways = $True
+# Update the virtual network peering
+Set-AzVirtualNetworkPeering -VirtualNetworkPeering $spokeToHubPeeringObj
+```
