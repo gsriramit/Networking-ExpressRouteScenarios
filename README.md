@@ -57,7 +57,7 @@ on: workflow_dispatch
 ```
 ## Cost-Saving Measures
 1. The author of this [vWan Playground repository](https://github.com/StefanIvemo/vwan-playground)
-) has provided a way to delete the vWan resource group using an empty RG deployment. This has not worked for me 100% of the time. However it is always good to try. The same concept can be applied to the resource group that hosts all the virtual networking resources
+has provided a way to delete the vWan resource group using an empty RG deployment. This has not worked for me 100% of the time. However it is always good to try. The same concept can be applied to the resource group that hosts all the virtual networking resources
 2. Stop/Deallocate all the test virtual machines if you aren't using them. This wont delete the machines but would turn them off so that you dont have to pay for the compute resources.
 3. Delete the bastion hosts when you you dont have a need to RDP into the machines to test the connectivity test cases
 4. A common measure known to all- for lab exercises choose to deploy the VPN and express route gateways in a region where the resource costs are less and also has support for all the express route requirements and scalability needs
