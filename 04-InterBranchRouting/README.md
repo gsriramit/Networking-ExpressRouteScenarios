@@ -69,7 +69,21 @@ https://docs.microsoft.com/en-us/azure/route-server/expressroute-vpn-support
 | 172.31.255.0/24  | 10.0.2.4      | 10.0.2.15     | 12076-65501 | 32768  | IBgp    | 10.0.10.4     |
 | 172.31.255.0/24  | 10.0.2.4      | 10.0.2.15     | 12076-65501 | 32768  | IBgp    | 10.0.10.5     |
 
-**Note**: I have added the downloaded BGP Peers, Routes Learnt CSV files in the Artifacts folder
+**Note**: I have added the downloaded BGP Peers, Routes Learnt CSV files in the Artifacts folder  
+7. Routes advertised and learnt 
+   - Advertised from Azure to On-Premise Site-1 (through the VPN Gateway)
+      - 10.0.0.0/16
+      - 10.1.0.0/16
+      - 172.31.255.0/24
+   - Learnt from On-Premise Site-1
+     - 192.168.29.0/24
+   -  Advertised from Azure to On-Premise Site-2 (through the ER Gateway)
+      - 10.0.0.0/16
+      - 10.1.0.0/16
+      - 192.168.29.0/24
+   - Learnt from On-Premise Site-2
+     - 172.31.255.0/24
+
 
 ### Post-Deployment Script
 Branch to Branch routing can be enabled from within the same ARM template that deploys the Route Server or through a post-deployment powershell script.
