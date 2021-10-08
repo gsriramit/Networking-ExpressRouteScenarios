@@ -1,7 +1,14 @@
-## VPN Gateway in Active-Active Mode - Diagram
+## VPN Gateway Deployment Mode
+Azure VPN Gateway needs to be deployed in an Active-Active Mode and have the ASN set to 65515 for the Inter-Branch routing scenario to work. This is a requirement that has been stated in the documentation.
+
+### Deployment Topology
+![image](https://user-images.githubusercontent.com/13979783/136536088-cc11ecee-5664-475f-9179-24ad75a15dd4.png)  
+**Documentation Source**- https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-highlyavailable#active-active-vpn-gateways
 
 ### Key Points from the documentation
-
+1. In this configuration, each Azure gateway instance will have a unique public IP address, and *each will establish an IPsec/IKE S2S VPN tunnel to your on-premises VPN device specified in your local network gateway and connection*
+2. Note that both VPN tunnels are actually part of the same connection. You will still need to configure your on-premises VPN device to accept or *establish two S2S VPN tunnels to those two Azure VPN gateway public IP addresses*.
+3. Because the Azure gateway instances are in active-active configuration, the *traffic from your Azure virtual network to your on-premises network will be routed through both tunnels simultaneously, even if your on-premises VPN device may favor one tunnel over the other*.
 
 ## Pre-requisites
 1. Creation of 2 VPN Demand Dial Interfaces with different route weights
