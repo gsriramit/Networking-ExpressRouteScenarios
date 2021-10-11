@@ -47,14 +47,9 @@ If you cleanup the virtual wan and associated resources after every scenario, be
 Add the following GitHub Secrets to be able to refer to them in the actions (workflows). Please note that you can enhance the workflows as per your needs.
 | GitHub Secret            | Value                                                                                                                    |
 |--------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| AZURE_CREDENTIALS        | "{   ""clientId"": """",
-  ""name"": """",
-  ""clientSecret"": """",
-  ""subscriptionId"": """",
-  ""tenantId"": """"
-}" |
-| AZURE_SUBSCRIPTION_PAYG  | Id of the subscription                                                                                                   |
-| AZURE_RG                 | Resource Group Name string                                                                                               |
+| AZURE_CREDENTIALS_SECONDARY        | "{   ""clientId"": """",""name"": """",""clientSecret"": """",""subscriptionId"": """",""tenantId"": """"}"    |
+| AZURE_SUBSCRIPTION_360   | Id of the subscription                                                                                                   |
+| AZURE_RG_SHAREDNETWORK   | Resource Group Name string                                                                                               |
 
 ### GitHub Trigger
 All the workflows in this repository would be kicked off using a **workflow_dispatch** which is a manual trigger. If you need the deployment to be triggered on the completion of a PR or a code checkin to DEV, be sure to change that part of the code
