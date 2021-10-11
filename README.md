@@ -1,14 +1,20 @@
 # Networking-ExpressRouteScenarios
 This repository consists of some of the common Express Route scenarios &amp; architectures that are used in Azure hybrid networking.
 
-## Map of the scenarios in this repository
+## Scenarios
 
 | Repo Folder           | Scenario                                                                                                                                                                                                                                                                      |
+|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| InterBranchRouting | Setup of inter-branch routing  between 2 branches/sites(one connected through ER-Gw in step2 & another through VPN-Gw in step3) that do not have direct connectivity. The connectivity in this case is made possible through a route server deployed in the Azure Hub Network |
+
+## Steps in setting up the environment
+
+| Repo Folder           | Step                                                                                                                                                                                                                                                                      |
 |-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 01-BaseNetworkSetup   | Setup of a hub and spoke network with the appropriate segmentation                                                                                                                                                                                                            |
 | 02-ExpressRoute       | Setup of an express route connection from an express route gateway in the hub network to a site that represents the On-Premise DC or branch                                                                                                                                   |
 | 03- S2S VPN with BGP  | Setup of a VPN connection with a Site in an active-active mode with redundant azure gateway instances                                                                                                                                                                         |
-| 04-InterBranchRouting | Setup of inter-branch routing  between 2 branches/sites(one connected through ER-Gw in step2 & another through VPN-Gw in step3) that do not have direct connectivity. The connectivity in this case is made possible through a route server deployed in the Azure Hub Network |
+| 04-InterBranchRouting | Deployment of an Azure Route Server in the Hub Network |
 
 ## RRAS to simulate a Site to Site VPN Connection
 In a lab setup, Microsoft's RRAS (Routing & Remote Access Server) can be used to establish a site to site VPN connection. If you want to understand how a S2S connection works in general, I have written a blog that has captured the important details-[Working of S2S VPN](https://ramsaztechbytes.in/2021/05/07/azure-s2s-vpn-exploration-with-rras/)  
