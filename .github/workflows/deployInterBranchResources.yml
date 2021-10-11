@@ -20,8 +20,8 @@ jobs:
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_360 }}
         resourceGroupName: ${{ secrets.AZURE_RG_SHAREDNETWORK }}
-        template: ./03-InterBranchRouting/Templates/RouteServerTemplate.json
-        parameters: ./03-InterBranchRouting/Templates/RouteServerParameters.json
+        template: ./04-InterBranchRouting/Templates/RouteServerTemplate.json
+        parameters: ./04-InterBranchRouting/Templates/RouteServerParameters.json
     
     - name: Azure PowerShell Action
       uses: Azure/powershell@v1
