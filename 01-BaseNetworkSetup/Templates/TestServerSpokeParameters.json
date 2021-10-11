@@ -33,7 +33,7 @@
             "value": "adminaccount"
         },
         "adminPassword": {
-            "value": "adminpwd#123"
+            "value": ""
         },
         "patchMode": {
             "value": "AutomaticByOS"
@@ -57,7 +57,7 @@
             "value": "en"
         },
         "autoShutdownNotificationEmail": {
-            "value": "gsriramit@gmail.com"
+            "value": ""
         }
     }
 }
