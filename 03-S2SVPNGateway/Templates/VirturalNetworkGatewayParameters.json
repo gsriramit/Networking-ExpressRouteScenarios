@@ -45,7 +45,7 @@
             "value": []
         },
         "gatewayIpAddress": {
-            "value": "" // Gateway public IP Address
+            "value": "" //Public IP Address of Local Network Gateway
         },
         "lgwasn": {
             "value": 65050
