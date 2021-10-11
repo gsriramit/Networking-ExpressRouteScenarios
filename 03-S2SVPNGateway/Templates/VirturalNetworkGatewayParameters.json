@@ -45,19 +45,19 @@
             "value": []
         },
         "gatewayIpAddress": {
-            "value": "49.37.211.199"
+            "value": "" // Gateway public IP Address
         },
         "lgwasn": {
             "value": 65050
         },
         "bgpPeeringAddress": {
-            "value": "192.168.29.52"
+            "value": "" //Private IP Address of the RRAS
         },
         "connectionName":{
             "value": "conn-s2s-branch-india"
         },
         "sharedKey":{
-            "value": "testpsk987"
+            "value": "" // Shared Secret Key used while configuring the S2S VPN Connection 
         }
     }
 }
